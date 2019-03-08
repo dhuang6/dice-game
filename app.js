@@ -12,13 +12,22 @@ do some dom practice problems.
 */
 //we are using an array to store our two player scores so we can have 1 var to keep track of.
 
-var scores, roundScore, activePlayer, dice;
+//global scope vars
+var scores, roundScore, activePlayer, dice, gamePlaying;
+
     init();
     
-//////////////   issues   //////////////////////////////
+///////////////////////////////////   issues   /////////////////////////////////////
 /*
 once a player wins you can continue to click the roll dice button and the current score gets added
 this also then breaks the active player
+
+
+we will use a state variable to tell us the condition of a system
+is our game playing or not playing
+created a global var called gamePlaying
+enabled it under function init()
+under win condition confirmed disable this state var.
 */
 
 
@@ -36,8 +45,10 @@ document.querySelector('#current-' + activePlayer).textContent = dice;
 
 //anon function to get the value of rolling the dice.
 document.querySelector('.btn-roll').addEventListener('click', function(){
-  
-  //get a random num
+  //only allow the dice to be rolled if gamePlaying = true;
+  if(gamePlaying){
+    
+     //get a random num
   var dice = Math.floor((Math.random() * 6) +1);
   
   //display result
@@ -53,8 +64,8 @@ document.querySelector('.btn-roll').addEventListener('click', function(){
   } else {
     //next player
    nextPlayer();
+     }
   }
-  
 });
 
 
@@ -65,8 +76,9 @@ new game button doesn't work yet.
 
 //first we need to capture the id in the dom
 document.querySelector('.btn-hold').addEventListener('click', function(){
-    
-    //need to get the global score captured
+  //only allow the values to be held if the game is active.
+    if(gamePlaying){
+       //need to get the global score captured
     scores[activePlayer] += roundScore;
     
     //update the ui textContent is how we are updating the dom with new info.
@@ -74,16 +86,19 @@ document.querySelector('.btn-hold').addEventListener('click', function(){
     
     //check if player won the game.
     if(scores[activePlayer] >= 20){
+      
       document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
       document.querySelector('.dice').style.display = 'none';
       //dom manipulating the entire player panel with a css class add
       document.querySelector('.player-' + activePlayer + '-panel').classList.add('winner');
       //remove the active class css change. Using the variable trick to switch
       document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
+      gamePlaying = false;
     } else { //otherwise it's the other player's turn.
       nextPlayer();
       
       
+        }
     }
 });
 
@@ -101,9 +116,11 @@ function nextPlayer(){
   
 }
 
-document.querySelector('.btn-new').addEventListener('click', init )
-    //start a new game.
-    console.log(init);
+
+  //start a new game.
+    document.querySelector('.btn-new').addEventListener('click', init )
+    
+    
 
 
 
@@ -116,6 +133,7 @@ function init(){
   roundScore = 0;
 //0 will be the 1st player 1  = 2nd player b/c our scores are stored in an arr.
   activePlayer = 0;
+  gamePlaying = true;
   
      //hides the dice image when first starting the game. uses css style
   document.querySelector('.dice').style.display = 'none';
