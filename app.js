@@ -7,13 +7,25 @@ GAME RULES:
 - The player can choose to 'Hold', which means that his ROUND score gets added to his GLBAL score. After that, it's the next player's turn
 - The first player to reach 100 points on GLOBAL score wins the game
 
+CODE CHALLENGE 3:
 
-do some dom practice problems.
+1) A player loses his entire score when he rolls two 6's in a row. After that, it's the next player's turn.
+(HINT: always save the previous dice roll in a separate var )
+
+2) Add an input field to the html where players can set the winning score, so that they can change the predefined score of 100.
+(You can read that value with the .value property in Javascript. Google it)
+
+3) Add another dice to the game, so that there are two dice now. The player loses his current score when either one hits 1.
+(You will need css to position the second dice
+review the code for the first 1.)
+
+
+inside of budgety we have been using them add event listeners under functions.
 */
 //we are using an array to store our two player scores so we can have 1 var to keep track of.
 
 //global scope vars
-var scores, roundScore, activePlayer, dice, gamePlaying;
+var scores, roundScore, activePlayer,gamePlaying;
 
     init();
     
@@ -30,8 +42,6 @@ enabled it under function init()
 under win condition confirmed disable this state var.
 */
 
-
-
 /*
 allows us to select elements like css. select the element and make it our random num.
 we are using '#current-' + activePlayer which we defined above.
@@ -42,9 +52,12 @@ document.querySelector('#current-' + activePlayer).textContent = dice;
 
 */
 
+/*
+make rolling the dice a function.
+*/
 
 //anon function to get the value of rolling the dice.
-document.querySelector('.btn-roll').addEventListener('click', function(){
+function dice(){
   //only allow the dice to be rolled if gamePlaying = true;
   if(gamePlaying){
     
@@ -66,7 +79,9 @@ document.querySelector('.btn-roll').addEventListener('click', function(){
    nextPlayer();
      }
   }
-});
+
+  
+}
 
 
 /*
@@ -75,7 +90,7 @@ new game button doesn't work yet.
 */
 
 //first we need to capture the id in the dom
-document.querySelector('.btn-hold').addEventListener('click', function(){
+    document.querySelector('.btn-hold').addEventListener('click', function(){
   //only allow the values to be held if the game is active.
     if(gamePlaying){
        //need to get the global score captured
@@ -85,7 +100,7 @@ document.querySelector('.btn-hold').addEventListener('click', function(){
     document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
     
     //check if player won the game.
-    if(scores[activePlayer] >= 20){
+    if(scores[activePlayer] >= 100){
       
       document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
       document.querySelector('.dice').style.display = 'none';
@@ -113,7 +128,7 @@ function nextPlayer(){
     document.querySelector('.player-1-panel').classList.toggle('active');
     
     document.querySelector('.dice').style.display = 'none';
-  
+    console.log('switched players!');
 }
 
 
