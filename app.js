@@ -54,34 +54,54 @@ document.querySelector('#current-' + activePlayer).textContent = dice;
 
 /*
 make rolling the dice a function.
+tie into the values with an array?
 */
 
-//anon function to get the value of rolling the dice.
-function dice(){
-  //only allow the dice to be rolled if gamePlaying = true;
-  if(gamePlaying){
-    
-     //get a random num
-  var dice = Math.floor((Math.random() * 6) +1);
+var roll = (function(){
+  var count = 0;
+  var lastRoll = 0;
   
-  //display result
-  var diceDOM =  document.querySelector('.dice');
-  diceDOM.style.display = 'block';
-  diceDOM.src='dice-' + dice + '.png';
-  
-  //update the round score IF the rolled num was not a 1.
-  if(dice !== 1){
+  return function(){
+    if(gamePlaying){
+      var dice = Math.floor(Math.random() *6) + 1; //1 to 6 only
+      var thisRoll = dice;
+      
+      if(dice === 6){
+        lastRoll = 6;
+        count += 1;
+        
+      } else {
+        lastRoll = 0;
+        count = 0;
+      }
+      if(thisRoll === 6 && lastRoll === 6 && count === 2){
+        alert('You rolled a six twice');
+        lastRoll = 0;
+        count = 0;
+        //remove the score for rolling two sixes.
+        scores[activePlayer] = 0;
+        nextPlayer();
+        
+        return;
+      }
+      
+      //otherwise display the results.
+      var diceDOM =  document.querySelector('.dice');
+          diceDOM.style.display = 'block';
+          diceDOM.src='dice-' + dice + '.png';
+    if(dice !== 1){
     //add score
     roundScore += dice;
     document.querySelector('#current-' + activePlayer).textContent = roundScore;
   } else {
     //next player
-   nextPlayer();
-     }
+      nextPlayer();
+        }
+      
+    }
   }
-
   
-}
+})();
 
 
 /*
