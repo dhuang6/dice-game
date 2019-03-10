@@ -141,6 +141,26 @@ i {
 .btn-roll { top: 403px;}
 .btn-hold { top: 467px;}
 
+#textInput {
+  text-align:center;
+  margin: auto;
+  
+}
+
+#textInput #updateWincondition {
+  margin:auto;
+  display: block;
+  padding-bottom: .3em;
+  padding-top:.2em;
+}
+
+ #updateScore {
+   
+  margin-left:306px;
+  background-color:gray;
+  float: right;
+}
+
 .dice {
     position: absolute;
     left: 50%;
