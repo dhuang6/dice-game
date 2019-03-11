@@ -21,13 +21,15 @@ review the code for the first 1.)
 
 
 inside of budgety we have been using them add event listeners under functions.
+
+chromeOS package manager.
 */
 //we are using an array to store our two player scores so we can have 1 var to keep track of.
 
 //global scope vars
-var scores, roundScore, activePlayer,gamePlaying;
+var scores, roundScore, activePlayer,gamePlaying, newScore,count;
 
-    init();
+  init();
     
 ///////////////////////////////////   issues   /////////////////////////////////////
 /*
@@ -54,73 +56,96 @@ document.querySelector('#current-' + activePlayer).textContent = dice;
 
 /*
 make rolling the dice a function.
-tie into the values with an array?
 */
 
-var roll = (function(){
-  var count = 0;
-  var lastRoll = 0;
+
+//split the actual roll into a separate function;
+function diceRoll(){
+  if(gamePlaying){
+  var die = Math.floor(Math.random()*6) +1;
+  return die;
+  }
+}
+
+//the actual rolling of the die that gets called.
+function roll(){
+  var results = [];
   
-  return function(){
-    if(gamePlaying){
-      var dice = Math.floor(Math.random() *6) + 1; //1 to 6 only
-      var thisRoll = dice;
-      
-      if(dice === 6){
-        lastRoll = 6;
-        count += 1;
-        
-      } else {
-        lastRoll = 0;
-        count = 0;
-      }
-      if(thisRoll === 6 && lastRoll === 6 && count === 2){
-        alert('You rolled a six twice');
-        lastRoll = 0;
-        count = 0;
-        //remove the score for rolling two sixes.
-        scores[activePlayer] = 0;
-        nextPlayer();
-        
-        return;
-      }
-      
-      //otherwise display the results.
-      var diceDOM =  document.querySelector('.dice');
-          diceDOM.style.display = 'block';
-          diceDOM.src='dice-' + dice + '.png';
-    if(dice !== 1){
-    //add score
-    roundScore += dice;
-    document.querySelector('#current-' + activePlayer).textContent = roundScore;
-  } else {
-    //next player
-      nextPlayer();
+  let i = 0;
+    while (i < 2){
+      var rollDie = diceRoll();
+      results.push(rollDie);
+      console.log(results);
+      i++;
+  }
+  return results;
+}
+
+function checkResults(){//review the results of the row.
+  var diceDOM;
+  var game = roll();
+  for(let i = 0; i < game.length; i++){
+    if(game[i]===6){
+      count ++;
+      console.log(count);
+      if(count === 2){
+       //remove the score for rolling two sixes.
+        alert('you rolled two sixes!');
+          roundScore = 0;
+          nextPlayer();
         }
+      }
+    
+    else if(game[i] ===1){
+      nextPlayer();
+    }
+    else {//getting the results to display correctly inside css and on the webpage.
+      
+          diceDOM =  document.querySelector('.dice');
+          diceDOM.style.display = 'block';
+          diceDOM.src='dice-' + game[i] + '.png';
+          console.log(diceDOM);
+         roundScore += game[i];
+       
+   
+      }
       
     }
-  }
   
-})();
+  
+}
 
 
+function submit(){//end user can update score with input.
+   newScore = document.getElementById('updateWinscore').value;
+  if(gamePlaying){
+    if(newScore < 0){
+      alert('please input a number greater than 0!');
+    }
+    else {
+      return newScore;
+    }
+  }
+}
 /*
 Still have issues where you can continue to roll the dice after winning
 new game button doesn't work yet.
 */
-
+function holdScore(){
 //first we need to capture the id in the dom
-    document.querySelector('.btn-hold').addEventListener('click', function(){
+   
   //only allow the values to be held if the game is active.
     if(gamePlaying){
+      if(newScore !== ''){
        //need to get the global score captured
     scores[activePlayer] += roundScore;
     
     //update the ui textContent is how we are updating the dom with new info.
     document.querySelector('#score-' + activePlayer).textContent = scores[activePlayer];
+  
+    //check if player won the game. right now the score of 0 is allowing someone to win
     
-    //check if player won the game.
-    if(scores[activePlayer] >= 100){
+    if(scores[activePlayer] >= 100 || scores[activePlayer] >= newScore ){
       
       document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
       document.querySelector('.dice').style.display = 'none';
@@ -132,16 +157,16 @@ new game button doesn't work yet.
     } else { //otherwise it's the other player's turn.
       nextPlayer();
       
-      
+          }
         }
+      }
     }
-});
 
 function nextPlayer(){
   //created a function because we were going to be using this code repeatedly.
    activePlayer === 0 ? activePlayer = 1 : activePlayer = 0;
     roundScore = 0;
-    
+    count = 0;
     document.getElementById('current-0').textContent = '0';
     document.getElementById('current-1').textContent = '0';
     document.querySelector('.player-0-panel').classList.toggle('active');
@@ -153,14 +178,8 @@ function nextPlayer(){
 
 
   //start a new game.
-    document.querySelector('.btn-new').addEventListener('click', init )
+    document.querySelector('.btn-new').addEventListener('click', init );
     
-    
-
-
-
-
-
     
 //created an init function to allow us to run this code without breaking dry.
 function init(){
@@ -169,6 +188,9 @@ function init(){
 //0 will be the 1st player 1  = 2nd player b/c our scores are stored in an arr.
   activePlayer = 0;
   gamePlaying = true;
+  newScore = 100;
+  count = 0;
+  console.log('game started!');
   
      //hides the dice image when first starting the game. uses css style
   document.querySelector('.dice').style.display = 'none';

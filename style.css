@@ -1,7 +1,9 @@
 /**********************************************
-*** GENERAL
+*** GENERAL ****
 **********************************************/
-
+/*
+sass cs
+*/
 * {
     margin: 0;
     padding: 0;
@@ -141,6 +143,26 @@ i {
 .btn-roll { top: 403px;}
 .btn-hold { top: 467px;}
 
+#textInput {
+  text-align:center;
+  margin: auto;
+  
+}
+
+#textInput #updateWincondition {
+  margin:auto;
+  display: block;
+  padding-bottom: .3em;
+  padding-top:.2em;
+}
+
+ #updateScore {
+   
+  margin-left:306px;
+  background-color:gray;
+  float: right;
+}
+
 .dice {
     position: absolute;
     left: 50%;
@@ -148,6 +170,11 @@ i {
     transform: translateX(-50%);
     height: 100px;
     box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.10);
+}
+
+#dice {
+    display: block;
+    
 }
 /*
 using css classLists to update the css we are simply adding and removing them.

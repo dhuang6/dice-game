@@ -30,12 +30,19 @@
             </div>
             
             <button class="btn-new"><i class="ion-ios-plus-outline"></i>New game</button>
-            <button class="btn-roll" onclick="roll()"><i class="ion-ios-loop"></i>Roll dice</button>
-            <button class="btn-hold"><i class="ion-ios-download-outline"></i>Hold</button>
+            <button class="btn-roll" onclick="checkResults()"><i class="ion-ios-loop"></i>Roll dice</button>
             
+            <button class="btn-hold" onclick="holdScore()"><i class="ion-ios-download-outline"></i>Hold</button>
             <img src="dice-5.png" alt="Dice" class="dice">
+            <img src="dice-5.png" alt="dice" id="dice" class="dice">
+            <img src="dice-3.png" alt="Dice" class="dice">
+            <img src="dice-3.png" alt="dice" id="dice" class="dice">
+            <div id="textInput">
+              Set score required for winning:
+              <input id="updateWinscore" type="number" name="winCondition" />
+              <button id="updateScore" onclick="submit()">submit</button>
+            </div>
         </div>
-        
-        <script src="app.js"></script>
+      <script src="app.js"></script>
     </body>
 </html>
