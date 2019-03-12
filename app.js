@@ -28,6 +28,8 @@ chromeOS package manager.
 
 //global scope vars
 var scores, roundScore, activePlayer,gamePlaying, newScore,count;
+//create a new function to run before init when the win condition can be changed otherwise can't be changed..
+
 
   init();
     
@@ -59,6 +61,7 @@ make rolling the dice a function.
 */
 
 
+
 //split the actual roll into a separate function;
 function diceRoll(){
   if(gamePlaying){
@@ -67,7 +70,7 @@ function diceRoll(){
   }
 }
 
-//the actual rolling of the die that gets called.
+//the actual rolling of the die that gets called. We are rolling 2x.
 function roll(){
   var results = [];
   
@@ -82,17 +85,20 @@ function roll(){
 }
 
 function checkResults(){//review the results of the row.
-  var diceDOM;
+  var diceDOM, numOfsix,dice2;
+  
   var game = roll();
+  
   for(let i = 0; i < game.length; i++){
+    
     if(game[i]===6){
-      count ++;
+     numOfsix = count ++;
+      roundScore += game[i]
       console.log(count);
       if(count === 2){
        //remove the score for rolling two sixes.
         alert('you rolled two sixes!');
-          roundScore = 0;
-          nextPlayer();
+        nextPlayer();
         }
       }
     
@@ -100,33 +106,41 @@ function checkResults(){//review the results of the row.
       nextPlayer();
     }
     else {//getting the results to display correctly inside css and on the webpage.
-      
+      //write a foreach loop for the display
           diceDOM =  document.querySelector('.dice');
           diceDOM.style.display = 'block';
           diceDOM.src='dice-' + game[i] + '.png';
+          
+          dice2 = document.getElementById('dice');
+          dice2.style.display = 'block';
+          dice2.src='dice-'+ game[i] + '.png';
+          
+          
           console.log(diceDOM);
-         roundScore += game[i];
+          
+          //outside of that loop this is their score (not added to their total yet).
+          roundScore += game[i]
        
    
       }
       
-    }
-  
+  }
   
 }
 
 
-function submit(){//end user can update score with input.
+function submit(){//end user can update win condition with input. need to update to prevent change while game is active.
    newScore = document.getElementById('updateWinscore').value;
-  if(gamePlaying){
+  
     if(newScore < 0){
       alert('please input a number greater than 0!');
     }
     else {
+      alert('win condition set to ' + newScore);
       return newScore;
     }
   }
-}
+
 /*
 Still have issues where you can continue to roll the dice after winning
 new game button doesn't work yet.
@@ -145,7 +159,7 @@ function holdScore(){
   
     //check if player won the game. right now the score of 0 is allowing someone to win
     
-    if(scores[activePlayer] >= 100 || scores[activePlayer] >= newScore ){
+    if(scores[activePlayer] >= 50 || scores[activePlayer] >= newScore ){
       
       document.querySelector('#name-' + activePlayer).textContent = 'Winner!';
       document.querySelector('.dice').style.display = 'none';
@@ -154,6 +168,7 @@ function holdScore(){
       //remove the active class css change. Using the variable trick to switch
       document.querySelector('.player-' + activePlayer + '-panel').classList.remove('active');
       gamePlaying = false;
+  
     } else { //otherwise it's the other player's turn.
       nextPlayer();
       
@@ -194,6 +209,7 @@ function init(){
   
      //hides the dice image when first starting the game. uses css style
   document.querySelector('.dice').style.display = 'none';
+  document.getElementById('dice').style.display = 'none';
 
 //set all the values to be 0 at the start of the game.
   document.getElementById('score-0').textContent = '0';
